@@ -27,7 +27,35 @@ void module_generate(int fd, struct query_options* query_params)
   
   child_pid = fork();
   if (child_pid == 0) {
-    char* argv[] = { "/bin/ncal", "-h", NULL };
+    
+    size_t argv_length = 2;
+    char** argv = (char**) xmalloc(argv_length* sizeof(char*));
+    argv[0] = "/bin/ncal";
+    argv[1] = "-h";
+    
+    if (query_params != NULL) {
+      char* aux = NULL;
+
+      for (int i=0 ; i<query_params->qnt ; i++) {
+        aux = strtok(query_params->map[i], "=");
+
+        if (strcasecmp(aux, "mes") == 0) {
+          argv = (char**) xrealloc(argv, (argv_length+=2) * sizeof(char*));
+          argv[argv_length-2] = "-m";
+          aux = strtok(NULL, "=");
+          argv[argv_length-1] = aux;
+        }
+
+        if (strcasecmp(aux, "ano") == 0) {
+          argv = (char**) xrealloc(argv, (argv_length++) * sizeof(char*));
+          aux = strtok(NULL, "=");
+          argv[argv_length-1] = aux;
+        }
+      }
+    }
+
+    argv = (char**) xrealloc(argv, argv_length* sizeof(char*));
+    argv[argv_length++] = NULL;
 
     rval = dup2(fd, STDOUT_FILENO);
     if (rval == -1) system_error("dup2");
