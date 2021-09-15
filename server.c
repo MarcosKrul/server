@@ -82,6 +82,7 @@ static void clean_up_child_process (int signal_number)
 static void handle_get (int connection_fd, const char* page)
 {
   struct server_module* module = NULL;
+  struct query_options* query_params = NULL;
 
   /* Make sure the requested page begins with a slash and does not
      contain any additional slashes -- we don't support any
@@ -89,6 +90,26 @@ static void handle_get (int connection_fd, const char* page)
 
  if (*page == '/' && strchr (page + 1, '/') == NULL) {
     char module_file_name[64];
+
+    strtok(page, "?");
+    char* aux = strtok(NULL, "?");
+
+    if (aux) {
+      char* params_maps = strtok(aux, "&");
+
+      query_params = (struct query_options*) xmalloc(sizeof(struct query_options));
+      query_params->qnt = 0;
+      query_params->map = (char**) xmalloc(sizeof(params_maps));
+      
+      while (params_maps) {
+        if (query_params->qnt != 0)
+          query_params->map = (char**) xrealloc(query_params->map, sizeof(query_params->map) + sizeof(params_maps));
+        
+        query_params->map[query_params->qnt] = params_maps;
+        params_maps = strtok(NULL, "&");
+        query_params->qnt += 1;
+      }
+    }
 
     /* The page name looks OK.  Construct the module name by appending
        ".so" to the page name.  */
@@ -117,7 +138,7 @@ static void handle_get (int connection_fd, const char* page)
     write (connection_fd, ok_response, strlen (ok_response));
     /* Invoke the module, which will generate HTML output and send it
        to the client file descriptor.  */
-    (*module->generate_function) (connection_fd, NULL);
+    (*module->generate_function) (connection_fd, query_params);
     /* We're done with the module.  */
     module_close (module);
   }

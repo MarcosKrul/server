@@ -43,6 +43,11 @@ extern char* get_self_executable_directory ();
 
 /*** Symbols defined in module.c  **************************************/
 
+struct query_options {
+   size_t qnt;
+   char** map;
+};
+
 /* An instance of a loaded server module.  */
 struct server_module {
   /* The shared library handle corresponding to the loaded module.  */
@@ -50,7 +55,7 @@ struct server_module {
   /* A name describing the module.  */
   const char* name;
   /* The function which generates the HTML results for this module.  */
-  void (* generate_function) (int, const char*);
+  void (* generate_function) (int, struct query_options*);
 };
 
 /* The directory from which modules are loaded.  */

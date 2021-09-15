@@ -17,7 +17,7 @@ struct server_module* module_open (const char* module_name)
 {
   char* module_path;
   void* handle;
-  void (* module_generate) (int, const char*);
+  void (* module_generate) (int, struct query_options*);
   struct server_module* module;
 
   /* Construct the full path of the module shared library we'll try to
@@ -36,7 +36,7 @@ struct server_module* module_open (const char* module_name)
   }
 
   /* Resolve the module_generate symbol from the shared library.  */
-  module_generate = (void (*) (int, const char*)) dlsym (handle, "module_generate");
+  module_generate = (void (*) (int, struct query_options*)) dlsym (handle, "module_generate");
   /* Make sure the symbol was found.  */
   if (module_generate == NULL) {
     /* The symbol is missing.  While this is a shared library, it

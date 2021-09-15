@@ -234,7 +234,7 @@ static char* page_end =
   " </body>\n"
   "</html>\n";
 
-void module_generate (int fd, const char* args)
+void module_generate (int fd, struct query_options* query_params)
 {
   size_t i;
   DIR* proc_listing;
