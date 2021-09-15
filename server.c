@@ -117,7 +117,7 @@ static void handle_get (int connection_fd, const char* page)
     write (connection_fd, ok_response, strlen (ok_response));
     /* Invoke the module, which will generate HTML output and send it
        to the client file descriptor.  */
-    (*module->generate_function) (connection_fd);
+    (*module->generate_function) (connection_fd, NULL);
     /* We're done with the module.  */
     module_close (module);
   }

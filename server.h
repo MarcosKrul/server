@@ -50,7 +50,7 @@ struct server_module {
   /* A name describing the module.  */
   const char* name;
   /* The function which generates the HTML results for this module.  */
-  void (* generate_function) (int);
+  void (* generate_function) (int, const char*);
 };
 
 /* The directory from which modules are loaded.  */

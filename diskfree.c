@@ -26,7 +26,7 @@ static char* page_end =
   " </body>\n"
   "</html>\n";
 
-void module_generate (int fd)
+void module_generate (int fd, const char* args)
 {
   pid_t child_pid;
   int rval;

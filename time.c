@@ -23,7 +23,7 @@ static char* page_template =
   " </body>\n"
   "</html>\n";
 
-void module_generate (int fd)
+void module_generate (int fd, const char* args)
 {
   struct timeval tv;
   struct tm* ptm;

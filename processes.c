@@ -234,7 +234,7 @@ static char* page_end =
   " </body>\n"
   "</html>\n";
 
-void module_generate (int fd)
+void module_generate (int fd, const char* args)
 {
   size_t i;
   DIR* proc_listing;

@@ -41,7 +41,7 @@ static char* error_page =
 
 static char* error_message = "Error reading /proc/issue.";
 
-void module_generate (int fd)
+void module_generate (int fd, const char* args)
 {
   int input_fd;
   struct stat file_info;
