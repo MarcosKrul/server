@@ -99,11 +99,11 @@ static void handle_get (int connection_fd, const char* page)
 
       query_params = (struct query_options*) xmalloc(sizeof(struct query_options));
       query_params->qnt = 0;
-      query_params->map = (char**) xmalloc(sizeof(params_maps));
+      query_params->map = (char**) xmalloc(sizeof(char*));
       
       while (params_maps) {
         if (query_params->qnt != 0)
-          query_params->map = (char**) xrealloc(query_params->map, sizeof(query_params->map) + sizeof(params_maps));
+          query_params->map = (char**) xrealloc(query_params->map, (query_params->qnt+1) * sizeof(char*));
         
         query_params->map[query_params->qnt] = params_maps;
         params_maps = strtok(NULL, "&");
