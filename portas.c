@@ -27,7 +27,28 @@ void module_generate(int fd, struct query_options* query_params)
   
   child_pid = fork();
   if (child_pid == 0) {
-    char* argv[] = { "/bin/netstat", NULL };
+    
+    size_t argv_length = 1;
+    char** argv = (char**) xmalloc(argv_length* sizeof(char*));
+    argv[0] = "/bin/netstat";
+    
+    if (query_params != NULL) {
+      char* aux = NULL;
+
+      for (int i=0 ; i<query_params->qnt ; i++) {
+        aux = strtok(query_params->map[i], "=");
+
+        if (strcasecmp(aux, "tipo") == 0) {
+          argv = (char**) xrealloc(argv, (argv_length++) * sizeof(char*));
+          aux = strtok(NULL, "=");
+          if (strcasecmp(aux, "tcp") == 0) argv[argv_length-1] = "--tcp";
+          else if (strcasecmp(aux, "udp") == 0) argv[argv_length-1] = "--udp";
+        }
+      }
+    }
+
+    argv = (char**) xrealloc(argv, argv_length* sizeof(char*));
+    argv[argv_length++] = NULL;
 
     rval = dup2(fd, STDOUT_FILENO);
     if (rval == -1) system_error("dup2");
