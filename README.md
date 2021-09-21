@@ -29,7 +29,6 @@ Adequação código *TCP stream server socket* do livro ***Advanced Linux Progra
     mkdir teste-servidor
     cd teste-servidor
     git clone https://github.com/MarcosKrul/server .
-    make
 ```
 
 * Compilação e execução

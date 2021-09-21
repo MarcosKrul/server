@@ -28,10 +28,11 @@ void module_generate(int fd, struct query_options* query_params)
   child_pid = fork();
   if (child_pid == 0) {
     
-    size_t argv_length = 2;
+    size_t argv_length = 3;
     char** argv = (char**) xmalloc(argv_length* sizeof(char*));
     argv[0] = "/bin/ncal";
     argv[1] = "-h";
+    argv[2] = "-b";
     
     if (query_params != NULL) {
       char* aux = NULL;
@@ -47,7 +48,7 @@ void module_generate(int fd, struct query_options* query_params)
         }
 
         if (strcasecmp(aux, "ano") == 0) {
-          argv = (char**) xrealloc(argv, (argv_length++) * sizeof(char*));
+          argv = (char**) xrealloc(argv, (++argv_length) * sizeof(char*));
           aux = strtok(NULL, "=");
           argv[argv_length-1] = aux;
         }
